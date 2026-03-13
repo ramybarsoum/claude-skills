@@ -18,10 +18,12 @@ Specs are behavioral contracts for AI agents, not delivery plans for humans. Eve
 - **Spec templates**: See [references/spec-templates.md](references/spec-templates.md) for 7-section and 14-section output formats plus NLSpec writing rules
 - **Completeness audit**: See [references/completeness-audit.md](references/completeness-audit.md) for the 5-phase verification checklist
 - **Question banks (MECE gaps)**: See [references/mece-gap-questions.md](references/mece-gap-questions.md) for Prompt 10 interview questions (comprehensive coverage Groups 31-40)
+- **Decomposition audit**: See [references/decomposition-audit.md](references/decomposition-audit.md) for step breakdown evaluation (merge/split/parallel analysis)
 
 ## Workflow Overview
 
 ```
+Phase -1: Decomposition Audit    → Batch mode only: evaluate step breakdown before interviewing
 Phase 0:  Setup                  → Mode selection, project intake, step identification
 Phase 1a: Behavioral Interview   → Prompts 1-3 via AskUserQuestion (behavioral contracts)
 Phase 1b: Production Bridge      → Prompts 5-9 via AskUserQuestion (production readiness)
@@ -31,6 +33,54 @@ Phase 3:  Review                 → User reviews draft, corrections applied
 Phase 4:  Audit                  → Completeness audit + gap detection + production bridge audit
 Phase 5:  Finalize               → Production-ready spec with audit report
 ```
+
+---
+
+## Phase -1: Decomposition Audit (Batch Mode Only)
+
+**Runs only in Batch mode.** When the user points to a folder of specs or asks to evaluate a multi-step system, this phase evaluates whether the step breakdown itself is correct before interviewing individual specs.
+
+Load [references/decomposition-audit.md](references/decomposition-audit.md) for the full audit process.
+
+### Trigger
+
+Phase -1 fires when:
+- The user provides a directory of spec files
+- The user says "run on all specs" or "evaluate the whole pipeline"
+- There are 5+ specs in the batch
+
+### Process
+
+1. **Read all specs.** Extract: step name, one job, input/output, AI judgment or structural, dependencies.
+2. **Map true dependencies.** Build a dependency graph from actual data flow. Distinguish hard dependencies (data doesn't exist without upstream step) from soft dependencies (uses upstream output as context but could function without it).
+3. **Run the 7 Decomposition Tests** on each step (details in the reference file):
+   - Test 1: The "AND" Test (split candidate)
+   - Test 2: The Merge Test (merge candidate)
+   - Test 3: The Parallelism Test (parallel candidate)
+   - Test 4: The "Is This a Step?" Test (UI view, NFR, data model feature, or alt entry point?)
+   - Test 5: The Trust Tax Test (does this exist because we don't trust the upstream step?)
+   - Test 6: The Entry Point Test (same output type from different triggers?)
+   - Test 7: The Event-Driven Test (sequential or reactive?)
+4. **Classify findings** into RED (likely over-engineered), YELLOW (questionable), GREEN (solid).
+5. **Propose reorganization** if red/yellow flags exist: new step list, dependency graph, phase grouping, parallel execution contracts, old-to-new mapping.
+6. **Get user approval** on the reorganized structure before proceeding to individual interviews.
+
+### Decomposition Audit Discipline
+
+**The Separation Burden**: Every step boundary creates a handoff event, an audit trail entry, a failure mode, a retry policy, and a data contract. The step must justify this overhead. If it can't, it should be merged.
+
+**The Parallel Question**: After building the dependency graph, always ask: "Which of these steps are sequential because they MUST be, vs. sequential because the planning happened to put them in that order?" True dependencies come from data flow. False dependencies come from linear thinking.
+
+**The Healthcare Exception**: In healthcare/compliance contexts, steps that look like "trust taxes" (re-checking upstream work) may be justified as independent verification. Challenge them, but respect the answer when the justification is "regulatory requirement" or "patient safety requires a second opinion."
+
+### Output
+
+Phase -1 produces:
+- A **spec index document** (`00-spec-index.md`) with the reorganized structure, decision log, dependency graph, and parallel execution contracts
+- An updated **`.spec-project-context.md`** with architecture decisions
+- Approval from the user to proceed with individual interviews on the surviving specs
+
+After Phase -1, proceed to Phase 0 for the first spec. The spec index determines interview order and priority.
 
 ---
 
@@ -47,8 +97,9 @@ Use AskUserQuestion to ask: **"What's your role in this interview?"**
 | **Eng-first** | Engineer fills tech decisions on an existing spec | Ask `[ENG]` and `[BOTH]` questions. Skip `[PM]` questions. Mark skipped items `[OPEN — PM]`. |
 | **Fill-gaps** | Complete a partially-written spec | Load existing spec. Show only `[OPEN]` items. User answers the unanswered questions. |
 | **Quick** | Simple structural steps, fast spec | Ask Groups 1-6 (behavioral core) + 31-32 (security, data lifecycle) only. Skip production bridge and remaining MECE groups. Mark skipped areas `[QUICK — expand with full interview if needed]`. |
+| **Batch** | Evaluate a set of specs as a whole system | Run Phase -1 (Decomposition Audit) first. Grill the step breakdown for merge/split/parallel opportunities. Then interview each surviving spec individually. |
 
-**Mode selection shortcut:** If the user says "solo" or "I'm doing everything," map to **All**. If they say "I'm the PM" or "product side," map to **PM-first**. If they say "engineering" or "tech decisions," map to **Eng-first**. If they reference an existing spec with gaps, map to **Fill-gaps**. If they say "quick," "just the basics," or "simple step," map to **Quick**.
+**Mode selection shortcut:** If the user says "solo" or "I'm doing everything," map to **All**. If they say "I'm the PM" or "product side," map to **PM-first**. If they say "engineering" or "tech decisions," map to **Eng-first**. If they reference an existing spec with gaps, map to **Fill-gaps**. If they say "quick," "just the basics," or "simple step," map to **Quick**. If they say "run on all specs," "evaluate the whole pipeline," "interview all steps," or point to a folder of specs, map to **Batch**.
 
 ### Step 0.2 — Project Intake (first spec only)
 
@@ -72,8 +123,29 @@ If the user has already done project intake in this session (previous specs exis
 **Scope:** [full system / one step at a time]
 **Created by:** [name]
 **Date:** [date]
-**Decisions log:** [locked decisions from previous specs]
-**Corrections log:** [patterns from previous spec corrections]
+
+## Architecture Decisions
+[Locked decisions from Decomposition Audit or prior specs. Each with date and rationale.]
+- [date]: [decision]. Rationale: [why].
+
+## Execution Model
+**Pattern:** [linear pipeline / phased parallel / event-driven / hybrid]
+**Phases:** [list phases with parallel lanes if applicable]
+**Dependency graph:** [which specs depend on which, fork/join points]
+
+## Parallel Execution Contracts
+[If phased parallel: document shared inputs, independent outputs, join triggers, exception paths per phase]
+
+## Spec Index Reference
+**Index file:** [path to 00-spec-index.md if it exists]
+**Total specs:** [count]
+**Interview priority:** [ordered list of which specs to interview first and why]
+
+## Decisions Log
+[Locked decisions from previous specs. Do not re-derive.]
+
+## Corrections Log
+[Patterns from previous spec corrections. Inform later specs.]
 ```
 
 ### Step 0.3 — Step Identification
@@ -356,11 +428,39 @@ For **PM-first** or **Eng-first** mode: Remind the user which `[OPEN]` items nee
 
 ## Multi-Step Projects
 
-When speccing multiple steps in sequence:
+### Before Individual Interviews
+
+If 5+ specs exist, run **Phase -1 (Decomposition Audit)** first. The step breakdown is a design decision that deserves the same rigor as the specs themselves. Common findings:
+- Steps that should be merged (same input, same timing, outputs always consumed together)
+- Steps that can run in parallel (independent outputs from the same upstream data)
+- Steps that aren't pipeline steps (UI views, NFR specs, data model features, alt entry points)
+- Steps that are trust taxes (re-checking upstream work without regulatory justification)
+
+### During Individual Interviews
 
 - Maintain a **decisions log** of decisions locked in earlier specs. Do not re-derive.
 - Maintain a **corrections log** of corrections applied to earlier drafts. Patterns inform later specs.
 - Check **cross-step consistency** after each new spec (Phase 4, check 4).
 - Each step has one job. If a step description requires "and," it's probably two steps.
-- Steps are written in order. Each fully specced before starting the next.
 - Prompt levels are progressive: start with Prompt 1 for structural steps, add Prompt 2 when judgment appears, add Prompt 3 when consequences are high.
+
+### Parallel Steps
+
+When the Decomposition Audit identifies parallel execution:
+
+- **Parallel specs are interviewed independently** but share a common input contract.
+- **Each parallel spec must document**: what it reads (shared input), what it produces (independent output), and what it does NOT read (other parallel agents' outputs).
+- **The join point is a separate spec.** When parallel outputs merge, the merger/combiner needs its own spec covering: trigger condition (all outputs arrived), coherence checks (do the outputs agree?), conflict resolution (what if they contradict?), and the combined output schema.
+- **Exception paths bypass the join.** If a parallel agent detects something that requires immediate action (e.g., P0 emergency), it fires that action in parallel with the join. Document these exception paths in the parallel execution contract.
+
+### Interview Order
+
+When multiple specs exist, interview in this order:
+1. **New specs** that don't exist yet (highest priority, most uncertainty)
+2. **Merged specs** that absorb multiple old specs (need reconciliation)
+3. **Modified specs** that change execution model (e.g., removing a dependency for parallelism)
+4. **Unchanged specs** (lowest priority, may only need minor updates)
+
+### Step Naming Convention
+
+For parallel steps, use letter suffixes: `3a`, `3b`, `3c`. For alternative entry points, use the same number with letter suffixes: `7a` (automated), `7b` (manual), `7c` (event-triggered). For decimal steps (inserted urgently between existing steps), use: `5.5`. Sequential steps use integers: `1`, `2`, `3`.
