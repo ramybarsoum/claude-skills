@@ -1,0 +1,194 @@
+# Spec Output Templates
+
+## Table of Contents
+1. [7-Section Format (Structural Steps)](#7-section)
+2. [14-Section Format (Judgment Steps)](#14-section)
+3. [NLSpec Writing Rules](#nlspec)
+
+---
+
+## 7-Section Format — Structural Steps <a id="7-section"></a>
+
+Use for steps where the AI executes structural operations with minimal judgment calls. The step receives input, transforms or stores it, and passes output to the next step.
+
+```
+=== PROJECT SPECIFICATION ===
+Project: [Project Name] — Step N: [Step Name]
+Date: [date]
+Status: Draft — review before execution
+
+---
+
+## 1. Overview
+
+2-3 sentences: what this step does and why it matters.
+One sentence: what it explicitly does NOT do (scope boundary).
+
+## 2. Acceptance Criteria
+
+Numbered list of verifiable conditions.
+Each criterion checkable by an independent observer.
+No vague criteria ("high quality"). Only observable outcomes.
+
+## 3. Constraint Architecture
+
+### Must Do
+Non-negotiable requirements. Each tied to a reason.
+
+### Must Not Do
+Explicit prohibitions. Each with a one-line failure mode explanation:
+- Must not [action].
+  Prevents: [specific failure scenario]
+
+### Prefer
+Judgment guidance when multiple approaches are valid.
+
+### Escalate (Do Not Decide — Surface to [Owner])
+Technology/architecture decisions for engineering.
+Mark each: [OPEN — Engineering] or [OPEN — PM + Engineering]
+
+## 4. Task Decomposition
+
+Sub-tasks, each with:
+- Input / Output / Acceptance Criteria / Dependencies / Scope
+Technology scope questions: [OPEN — Engineering]
+
+## 5. Evaluation Criteria
+
+How to assess whether the step is working correctly in production.
+Specific and measurable where possible.
+
+## 6. Context and Reference
+
+Background the executor needs.
+Why specific decisions were made (the "why" that prevents
+"smart but wrong" execution).
+Constraints from external factors (compliance, channel behavior, etc.)
+
+## 7. Definition of Done
+
+Exactly three conditions that must all be true.
+"Step is complete when ALL of the following are true..."
+```
+
+---
+
+## 14-Section Format — Judgment Steps <a id="14-section"></a>
+
+Use for steps where the AI exercises judgment: classification, delegation, routing, escalation, communication decisions. This format uses all three prompts.
+
+```
+=== PROJECT SPECIFICATION ===
+Project: [Project Name] — Step N: [Step Name]
+Date: [date]
+Status: Draft — review before execution
+
+Note: This spec applies Prompt 1 (Specification Engineer) +
+Prompt 2 (Intent & Delegation Framework Builder) +
+Prompt 3 (Constraint Architecture Designer).
+Constraints are derived from failure modes, not from speculative guardrails.
+
+---
+
+## 1. Overview
+What this step does, why it matters, scope boundary.
+
+## 2. Core Intent (Prompt 2)
+What the system optimizes for that a reasonable alternative would not.
+What the decision-maker's version of "step failed" looks like.
+
+## 3. Priority Hierarchy (Prompt 2)
+Ordered conflict resolution. When these values conflict, resolve
+in this order: [1] ... [2] ... etc.
+
+## 4. Acceptance Criteria (Prompt 1)
+Independently verifiable conditions. Same rules as 7-section format.
+
+## 5. Constraint Architecture (Prompt 3 — failure-mode-driven)
+
+### Failure Mode [Name]: [description]
+[Constraints derived from this specific failure mode]
+
+Must Do
+Must Not Do (each tied to a specific failure mode)
+Prefer
+Escalate [OPEN — Engineering] or [OPEN — PM + Engineering]
+
+## 6. Decision Authority Map (Prompt 2)
+### Decide Autonomously
+### Decide with Notification (flag and proceed)
+### Escalate Before Acting (do not act without human)
+
+## 7. Quality Thresholds (Prompt 2)
+Routine vs. high-stakes definition for this step.
+The explicit line between them.
+
+## 8. Common Failure Modes (Prompt 2 + Prompt 3)
+Numbered failures with: what happened, root cause, correct approach.
+
+## 9. Special Handling Rules (Prompt 2)
+Exceptions to normal rules. Specific situations that need
+different behavior.
+
+## 10. Klarna Test (Prompt 2)
+Self-check before finalizing. "Am I optimizing for the
+label/rule, or for the action it triggers?"
+Specific check questions for this step.
+
+## 11. Task Decomposition (Prompt 1)
+Same sub-task format as 7-section. Input/Output/Acceptance/
+Dependencies/Scope.
+
+## 12. Evaluation Criteria (Prompt 1)
+How to know this step is working in production.
+
+## 13. Context and Reference (Prompt 1)
+The WHY behind key decisions. Same as section 6 in 7-section format.
+
+## 14. Definition of Done (Prompt 1)
+Conditions that must all be true. Same rigor as 7-section format.
+```
+
+---
+
+## NLSpec Writing Rules <a id="nlspec"></a>
+
+Every behavioral statement in the spec must have three components:
+
+```
+WHAT:  The system must do X
+WHEN:  Under condition Y
+WHY:   Because Z
+```
+
+The "why" is the most important part. When an agent encounters an edge case the spec didn't anticipate, the "why" allows it to make the correct decision.
+
+**Bad:** "The system must validate the patient record."
+
+**Good:** "WHAT: The system must verify that a record exists for the identified entity before proceeding to task creation. WHEN: After entity resolution succeeds (Step 3). WHY: Downstream steps (scheduling, task routing, assignment) all require a canonical record. Proceeding without one causes silent failures that are impossible to trace post-hoc."
+
+### The New-Hire Test
+
+A spec is complete when a capable new hire with no context could implement it with at most one clarifying question. If you would need to explain something verbally, that explanation belongs in the spec.
+
+### Constraint Writing Rules
+
+A constraint is a measurable invariant, not a policy statement.
+
+| Not a constraint | A constraint |
+|---|---|
+| "The system must be fast." | "P99 latency must not exceed 800ms under 100 concurrent requests." |
+| "Handle errors gracefully." | "On 5xx: retry with exponential backoff, base 2s, max 30s, max 3 attempts. Surface structured error." |
+| "Protect user data." | "PII fields must not appear in application logs at any level. Audit entries must include user_id, action, timestamp, resource_id." |
+
+If a constraint cannot be automatically verified, rewrite it until it can.
+
+### [OPEN] Item Markers
+
+In **split mode** (PM + Engineering separate):
+- `[OPEN — Engineering]` for technology decisions PM cannot make
+- `[OPEN — PM + Engineering]` for joint decisions requiring both sides
+- `[OPEN — PM]` for product decisions not yet finalized
+
+In **solo mode** (one person does both):
+- `[OPEN]` for any decision not yet made, with a note on what's needed to resolve it
