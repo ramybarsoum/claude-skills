@@ -1,0 +1,8 @@
+{
+  "name": "orchestrator",
+  "description": "Multi-task orchestrator that plans, delegates to subagents in waves, coordinates, and verifies complex work",
+  "version": "1.0.0",
+  "author": {
+    "name": "Ramy Barsoum"
+  }
+}
