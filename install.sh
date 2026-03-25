@@ -3,12 +3,12 @@ set -euo pipefail
 
 # Claude Skills Installer
 # Usage:
-#   Install all:     curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash
-#   Install one:     curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash -s -- feature-spec-interview
-#   Install group:   curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash -s -- --group coding
-#   Check updates:   curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash -s -- --check
-#   Uninstall:       curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash -s -- --uninstall
-#   List groups:     curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash -s -- --list
+#   Install all:     curl -fsSL https://raw.githubusercontent.com/ramybarsoum/claude-skills/main/install.sh | bash
+#   Install one:     curl -fsSL https://raw.githubusercontent.com/ramybarsoum/claude-skills/main/install.sh | bash -s -- feature-spec-interview
+#   Install group:   curl -fsSL https://raw.githubusercontent.com/ramybarsoum/claude-skills/main/install.sh | bash -s -- --group coding
+#   Check updates:   curl -fsSL https://raw.githubusercontent.com/ramybarsoum/claude-skills/main/install.sh | bash -s -- --check
+#   Uninstall:       curl -fsSL https://raw.githubusercontent.com/ramybarsoum/claude-skills/main/install.sh | bash -s -- --uninstall
+#   List groups:     curl -fsSL https://raw.githubusercontent.com/ramybarsoum/claude-skills/main/install.sh | bash -s -- --list
 
 REPO="ramybarsoum/claude-skills"
 BRANCH="main"
