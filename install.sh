@@ -10,7 +10,7 @@ set -euo pipefail
 #   Uninstall:       curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash -s -- --uninstall
 #   List groups:     curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash -s -- --list
 
-REPO="AllCare-ai/claude-skills"
+REPO="ramybarsoum/claude-skills"
 BRANCH="main"
 SKILLS_DIR="${HOME}/.claude/skills"
 HOOKS_DIR="${HOME}/.claude"

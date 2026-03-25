@@ -9,23 +9,23 @@ We use Claude Code across product, engineering, and design. These skills capture
 One command. Installs all skills, configures hooks, done.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ramybarsoum/claude-skills/main/install.sh | bash
 ```
 
 Install a single skill:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash -s -- feature-spec-interview
+curl -fsSL https://raw.githubusercontent.com/ramybarsoum/claude-skills/main/install.sh | bash -s -- feature-spec-interview
 ```
 
 Other commands:
 
 ```bash
 # Check for updates
-curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash -s -- --check
+curl -fsSL https://raw.githubusercontent.com/ramybarsoum/claude-skills/main/install.sh | bash -s -- --check
 
 # Uninstall
-curl -fsSL https://raw.githubusercontent.com/AllCare-ai/claude-skills/main/install.sh | bash -s -- --uninstall
+curl -fsSL https://raw.githubusercontent.com/ramybarsoum/claude-skills/main/install.sh | bash -s -- --uninstall
 ```
 
 Restart Claude Code after installing. Type `/find-skills` to browse everything.
