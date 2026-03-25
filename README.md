@@ -40,6 +40,7 @@ Everything a PM needs: spec writing, planning, strategy, research, and launch.
 
 | Skill | Description |
 |-------|-------------|
+| `allcare-feature-spec-interview` | **Full-stack spec interview framework.** 14 prompts, 61 question groups, strategic gate, three-tier eval harness, tech design generation. Self-contained: all prompts, templates, and audit checklists in one file. GSD interactive execution model. |
 | `feature-spec-interview` | Interactive NLSpec interview. 5 modes, 40 question groups. Produces AI-agent-executable specs. |
 | `brainstorming` | Structured creative exploration before building anything. |
 | `writing-plans` | Create implementation plans from specs or requirements. |
