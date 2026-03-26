@@ -1,6 +1,6 @@
 # Claude Skills
 
-100 shareable skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Built and maintained by the [AllCare](https://allcare.ai) team.
+110+ shareable skills for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Built and maintained by the [AllCare](https://allcare.ai) team.
 
 We use Claude Code across product, engineering, and design. These skills capture workflows we've battle-tested internally, plus community skills we've found useful.
 
@@ -57,6 +57,10 @@ Everything a PM needs: spec writing, planning, strategy, research, and launch.
 | `onboarding-cro` | Post-signup onboarding, activation, first-run experience, time-to-value. |
 | `analytics-tracking` | GA4, GTM, conversion tracking, event tracking, UTM parameters. |
 | `ralph-wiggum` | Devil's advocate reviewer. Finds logical gaps and questionable assumptions with humor. |
+| **Plan Reviews (from [gstack](https://github.com/garrytan/gstack))** | |
+| `plan-ceo-review` | CEO/founder-mode plan review. 4 modes: Scope Expansion, Selective Expansion, Hold Scope, Scope Reduction. 11 review sections, 18 cognitive patterns. |
+| `plan-eng-review` | Eng manager-mode plan review. Architecture, data flow, edge cases, test coverage, performance. 15 cognitive patterns. |
+| `office-hours` | YC Office Hours. Startup mode: 6 forcing questions exposing demand reality. Builder mode: design thinking for side projects. Saves a design doc. |
 
 ### 2. Coding
 
@@ -95,6 +99,11 @@ Code quality, review, testing, debugging, database, auth, and development workfl
 | `finishing-a-development-branch` | Merge, PR, or cleanup when implementation is done. |
 | `safe-file-deletion` | Enforces explicit permission before any file deletion. |
 | `explain-code` | Explain code with visual diagrams and analogies. |
+| **PR & QA (from [gstack](https://github.com/garrytan/gstack))** | |
+| `review` | Pre-landing PR review. Two-pass analysis: critical (SQL safety, race conditions, LLM trust boundaries) + informational. Fix-First flow. |
+| `investigate` | Systematic debugging with root cause investigation. Iron Law: no fixes without root cause. 4 phases, 6 pattern signatures, 3-strike rule. |
+| `qa` | Full QA: test, fix with atomic commits, re-verify. Health score rubric across 8 categories. Three tiers: Quick, Standard, Exhaustive. |
+| `qa-only` | Report-only QA. Same methodology as qa but never fixes anything. Structured report with health score and screenshots. |
 
 ### 3. UI/UX & Design
 
@@ -123,6 +132,10 @@ Frontend interfaces, design systems, browser automation, diagrams, and visual ar
 | **Browser Automation** | |
 | `agent-browser` | Browser automation for testing, form filling, screenshots, extraction. |
 | `dev-browser` | Persistent browser state. Navigate, fill, screenshot, scrape. |
+| **Design Reviews (from [gstack](https://github.com/garrytan/gstack))** | |
+| `plan-design-review` | Designer's eye plan review. Rates each dimension 0-10, explains what would make it a 10, then fixes to get there. 9 design principles, 12 cognitive patterns. |
+| `gstack-design-review` | Visual QA audit. 80-item checklist across 10 categories. Finds spacing issues, hierarchy problems, AI slop patterns. Fixes with atomic commits + before/after screenshots. |
+| `design-consultation` | Full design consultation. Researches landscape, proposes complete design system, generates font+color preview pages. Creates DESIGN.md. |
 
 ### 4. AI & Agents
 
@@ -195,6 +208,10 @@ Skills that modify how Claude Code itself operates.
 | `claude-opus-4-5-migration` | Migration utilities for Claude Opus 4.5. |
 | `security-guidance` | Security hooks and guidance. |
 | `file-permission` | File permission enforcement. |
+| **Ship & Release (from [gstack](https://github.com/garrytan/gstack))** | |
+| `ship` | Ship workflow: merge base, run tests, review diff, bump VERSION, update CHANGELOG, commit, push, create PR. Fully automated. |
+| `document-release` | Post-ship docs update. Cross-references diff against all project docs. Updates README, ARCHITECTURE, CONTRIBUTING, CLAUDE.md. |
+| `retro` | Weekly engineering retrospective. Git analysis, work patterns, code quality metrics, team-aware praise and growth areas, streak tracking. |
 
 ---
 
